@@ -17,7 +17,7 @@ val.append(mfccs)
 val = np.expand_dims(val,axis=1)
 # Create a new model instance
 from keras.models import load_model
-model = tf.keras.models.load_model('./Model/respir.h5')
+model = tf.keras.models.load_model('./model.h5')
 classes = ["COPD" ,"Bronchiolitis ", "Pneumoina", "URTI", "Healthy"]
 
 for i in zip(classes,scipy.special.softmax(model.predict(val))[0][0]):
