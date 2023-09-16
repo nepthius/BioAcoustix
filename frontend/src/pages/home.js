@@ -66,6 +66,12 @@ const Home = () => {
                 <h2>How BioAcoustix Enhances Telehealth Platforms</h2>
                 <p>BioAcoustix, with its advanced tracking...</p>
             </div>
+
+            <div className="homepage-segment" style={scrollEffect(3)} ref={el => segmentRefs.current[3] = el}>
+                <div className="homepage-circle circle-bottom-right"></div> {/* Use circle-bottom-right class here */}
+                <h2>Check out the voice analytics!</h2>
+                <p style={{textAlign: "center"}}><a href="/voice-analytics">Click here!</a></p>
+            </div>
         </div>
     )
 }

@@ -12,7 +12,7 @@ function App() {
       <div className="pages">
         <Routes>
         <Route 
-            path="/voice-analysis"
+            path="/voice-analytics"
             element={<Product/>}
           />
         <Route 
