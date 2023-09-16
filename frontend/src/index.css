@@ -1,13 +1,71 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Homepage styling */
+.homepage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    padding: 4rem 2rem;
+    background-color: #e9f8f1;
+    font-family: 'Arial', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.homepage-headline {
+    font-size: 3.5rem;
+    color: #34a853;
+    margin-bottom: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, #34a853, #0a4429);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Make the text transparent to show the background */
+}
+
+.homepage-segment {
+    position: relative;
+    width: 80%;
+    padding: 2rem;
+    margin: 2.5rem 0;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);  /* Increased shadow for less faded look */
+    overflow: hidden;
+    transform: scale(0.98);
+    transition: transform 0.2s;
+}
+
+.homepage-segment:hover {
+    transform: scale(1.02);
+}
+
+.homepage-segment h2 {
+    color: #34a853;
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.homepage-segment p {
+    font-size: 1.2rem;
+    text-align: justify;
+    line-height: 1.5;
+    color: #333;
+}
+
+.homepage-circle {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(52, 168, 83, 0.2);  /* Less transparent for less faded look */
+    border-radius: 50%;
+}
+
+.circle-top-left {
+    top: -50px;
+    left: -50px;
+}
+
+.circle-bottom-right {
+    bottom: -50px;
+    right: -50px;
 }

@@ -2,7 +2,9 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 //pages and components
-import Home from './pages/home'; 
+import Product from './pages/product';
+import Home from './pages/home';
+
 function App() {
   return(
     <div className="App">
@@ -10,9 +12,13 @@ function App() {
       <div className="pages">
         <Routes>
         <Route 
-            path="/"
-            element={<Home />}
+            path="/voice-analysis"
+            element={<Product/>}
           />
+        <Route 
+          path="/"
+          element={<Home/>}
+        />
         </Routes>
 
       </div>
