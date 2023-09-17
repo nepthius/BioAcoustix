@@ -265,3 +265,56 @@
 .note-content::-webkit-scrollbar-track {
     background: #f7f7f7;
 }
+
+.graph-dropdown-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;  /* Adjust this width as per your requirement */
+    align-items: flex-end;
+}
+
+.analysis-type-dropdown {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    
+}
+
+.analysis-type-dropdown label {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #34a853;  /* The light green color you've been using */
+}
+
+.analysis-type-dropdown select {
+    padding: 10px 15px;  /* Padding to make the dropdown look larger */
+    border-radius: 8px;  /* Rounded corners */
+    border: 2px solid #34a853;  /* Border using the light green color */
+    background-color: #e9f8f1;  /* A lighter green as the background color */
+    color: #34a853;  /* Text color in light green */
+    font-size: 1rem;  /* Adjust the font size as needed */
+    cursor: pointer;  /* Change the cursor to a hand on hover */
+    transition: all 0.3s;  /* Smooth transition for hover effects */
+    appearance: none;  /* Removes default appearance to allow custom styles */
+    -webkit-appearance: none;  /* Removes default appearance for Safari */
+    -moz-appearance: none;  /* Removes default appearance for Firefox */
+    width:130px;
+}
+
+.analysis-type-dropdown select:hover {
+    background-color: #34a853;  /* Change background color on hover */
+    color: #ffffff;  /* Change text color to white on hover */
+}
+
+/* Add a custom arrow to the dropdown for better appearance */
+.analysis-type-dropdown::after {
+    content: '\25BC';  /* This is a down arrow symbol */
+    position: absolute;
+    top: 50%;
+    right: 10px;  /* Adjust this value to move the arrow closer/farther from the right edge of the dropdown */
+    transform: translateY(-50%);  /* This centers the arrow vertically */
+    pointer-events: none;  /* Makes sure the dropdown still works */
+    color: #34a853;
+    right: 15px;  /* Adjust this to position the arrow appropriately */
+}

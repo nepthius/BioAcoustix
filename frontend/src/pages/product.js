@@ -13,6 +13,7 @@ const Product = () => {
     const [graphData, setGraphData] = useState(null);
     const chartRef = useRef(null);
     const [gptResponse, setGptResponse] = useState(null);  // <- Add state to store the gpt_response
+    const [analysisType, setAnalysisType] = useState('emotion'); // default to 'emotion'
 
 
     
@@ -34,6 +35,7 @@ const Product = () => {
         a.click();
         const formData = new FormData();
         formData.append('audio', audioBlob, 'audioRecording.ogg');
+        formData.append('analysisType', analysisType);
         fetch('/upload', {
             method: 'POST',
             body: formData
@@ -70,7 +72,7 @@ const Product = () => {
             // Extract the original name and use it when appending to formData
             const formData = new FormData();
             formData.append('audio', file, file.name);
-
+            formData.append('analysisType', analysisType);
             fetch('/upload', {
                 method: 'POST',
                 body: formData
@@ -86,11 +88,20 @@ const Product = () => {
                 setGraphData({
                     labels: labels,
                     datasets: [{
-                        label: 'Emotions',
+                        label: analysisType,
                         data: values,
                         backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
                                           '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
-                    }]
+                    }],
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                
                 });
                 setGptResponse(parsedData.gpt_response)
             })
@@ -139,10 +150,23 @@ const Product = () => {
 
     return (
         <animated.div style={fadeIn} className="product-dashboard">
-            <div className="graph-container">
-                {!audioFile && <p>Upload or record an audio file to view the analysis graph.</p>}
-                {graphData && <Bar data={graphData} />}
+            <div className="graph-dropdown-container">
+                <div className="graph-container">
+                    {!audioFile && <p>Upload or record an audio file to view the analysis graph.</p>}
+                    {graphData && (analysisType==="parkinsons" ? 
+                    <Bar data={graphData} options={graphData?.options} /> :
+                    <Bar data={graphData} />
+)}                </div>
+
+                <div className="analysis-type-dropdown">
+                    <label>Select Analysis Type: </label>
+                    <select value={analysisType} onChange={(e) => setAnalysisType(e.target.value)}>
+                        <option value="emotion">Emotion</option>
+                        <option value="parkinsons">Parkinson's</option>
+                    </select>
+                </div>
             </div>
+ 
 
             <div className="audio-actions">
                 {!isRecording ? (

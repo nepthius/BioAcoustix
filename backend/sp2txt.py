@@ -8,7 +8,7 @@ subprocess.run(["pip", "install", "git+https://github.com/openai/whisper.git"])
 # subprocess.run(["sudo", "apt", "update", "&&", "sudo", "apt", "install", "ffmpeg"])
 
 # Run the Whisper command
-audio_file = "backend/03-01-01-01-01-01-01.wav"
+audio_file = "./audio/audio_20230917071625.wav"
 model = "tiny.en"
 
 result = subprocess.run(["whisper", audio_file, "--model", model], capture_output=True, text=True)
