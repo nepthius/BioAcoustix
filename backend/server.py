@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+import json
 from werkzeug.utils import secure_filename
 import os
 import datetime
 import traceback
+from Demo_emotion import predict_emotion_from_audio
 
 
 app = Flask(__name__)
@@ -64,8 +66,14 @@ def upload_file():
 
             # Clean up the temporary file
             os.remove(temp_filename)
+            data = predict_emotion_from_audio(output_filename)
+            data = [(key, float(value)) for key, value in data]
 
-            return jsonify({"message": f"File uploaded and converted successfully as {output_filename}!"}), 200
+            json_data = [{'emotion': key, 'value': value} for key, value in data]
+            json_string = json.dumps(json_data, indent=2)
+
+
+            return jsonify(json_string), 200
 
         except Exception as e:
             app.logger.error(f"Error during conversion: {str(e)}")

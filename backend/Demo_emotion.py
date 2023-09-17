@@ -1,24 +1,40 @@
-"""
-Demo of how to use the respiratory model
-dir_ is path to sample respiratory wav
-"""
 import scipy
 import tensorflow as tf
-import keras
 import numpy as np
 import librosa
-val=[]
-dir_= './104_1b1_Pl_sc_Litt3200.wav'
-features = 52
-#input must be shape (58, 1, 1)
-data_x, sampling_rate = librosa.load(dir_,res_type='kaiser_fast')
-mfccs = np.mean(librosa.feature.mfcc(y=data_x, sr=sampling_rate, n_mfcc=features).T,axis=0)
-val.append(mfccs)
-val = np.expand_dims(val,axis=1)
-# Create a new model instance
 from keras.models import load_model
-model = tf.keras.models.load_model('./model.h5')
-classes = ["COPD" ,"Bronchiolitis ", "Pneumoina", "URTI", "Healthy"]
 
-for i in zip(classes,scipy.special.softmax(model.predict(val))[0][0]):
-    print(i)
+def predict_emotion_from_audio(audio_path):
+    val = []
+    features = 52
+    
+    # Load and process the audio file
+    data_x, sampling_rate = librosa.load(audio_path, res_type='kaiser_fast')
+    mfccs = np.mean(librosa.feature.mfcc(y=data_x, sr=sampling_rate, n_mfcc=features).T, axis=0)
+    val.append(mfccs)
+    val = np.expand_dims(val, axis=1)
+    val = np.swapaxes(val, 1, 2)
+    val = np.resize(val, (1, 58, 1))
+    
+    # Normalize the data
+    for i in range(len(val)):
+        val[i] = (val[i] + 5.05214) / 57.956
+    
+    # Load the trained model and predict
+    model = tf.keras.models.load_model('/Users/anish/BioAcoustix/backend/model.h5')
+    classes = ["angry", "calm", "disgust", "fear", "happy","neutral","sad","surprise"]
+    probabilities = scipy.special.softmax(model.predict(val))[0]
+    
+    # Create a list of tuples with class and its probability
+    results = list(zip(classes, probabilities))
+    
+    return results
+
+# Example usage:
+'''
+audio_path = '/Users/anish/BioAcoustix/backend/audio/audio_20230916205435.wav'
+model_path = '/Users/anish/BioAcoustix/backend/model.h5'
+predictions = predict_emotion_from_audio(audio_path)
+for emotion, prob in predictions:
+    print(f"{emotion}: {prob}")
+'''

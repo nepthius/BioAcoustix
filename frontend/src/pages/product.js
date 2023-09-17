@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { Bar } from 'react-chartjs-2';  // <-- Import the Bar component
+import 'chart.js/auto'; // This is an important import for chart.js v3 which automatically registers controllers, scales, elements, and plugins.
 
 const Product = () => {
     const [audioFile, setAudioFile] = useState(null);
@@ -8,12 +10,17 @@ const Product = () => {
     const [chunks, setChunks] = useState([]);
     let audioChunks = [];
     const mediaRecorderRef=useRef(null)
+    const [graphData, setGraphData] = useState(null);
+    const chartRef = useRef(null);
+
 
     
     const fadeIn = useSpring({
         opacity: 1,
         from: { opacity: 0 }
     });
+
+
 
     const sendAudioToServer = (audioBlob) => {
         console.log("audioblob: ", audioBlob)
@@ -56,6 +63,19 @@ const Product = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                console.log("type of data: ", typeof(data));
+                const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+                const labels = parsedData.map(item => item.emotion);
+                const values = parsedData.map(item => item.value);
+                setGraphData({
+                    labels: labels,
+                    datasets: [{
+                        label: 'Emotions',
+                        data: values,
+                        backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+                                          '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
+                    }]
+                });
             })
             .catch(error => {
                 console.error("There was an error sending the audio file", error);
@@ -104,7 +124,7 @@ const Product = () => {
         <animated.div style={fadeIn} className="product-dashboard">
             <div className="graph-container">
                 {!audioFile && <p>Upload or record an audio file to view the analysis graph.</p>}
-                {/* The graph component will be rendered here once the audio file is uploaded/recorded */}
+                {graphData && <Bar data={graphData} />}
             </div>
 
             <div className="audio-actions">
