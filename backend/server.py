@@ -7,6 +7,7 @@ import json
 import traceback
 import re
 from parkinsons import predict_park_from_audio
+from sp2txt import ibm_comms
 
 import openai
 import json
@@ -101,9 +102,12 @@ def upload_file():
                 # Convert the list back to a string
                 ddata = "\n".join(numbered_list).strip()
 
-                
+                dddata = ibm_comms(output_filename)
+                json_dataa = [{'emotion': key, 'score': value} for key, value in dddata.items()]
+                print("json data new: ", json_data)
                 response_data = {
                     "emotions": json_data,
+                    "IBM": json_dataa, 
                     "gpt_response": ddata  # Here, ddata is just a string
                 }
             

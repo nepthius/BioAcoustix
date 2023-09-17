@@ -11,6 +11,7 @@ const Product = () => {
     let audioChunks = [];
     const mediaRecorderRef=useRef(null)
     const [graphData, setGraphData] = useState(null);
+    const [graphData2, setGraphData2] = useState(null);
     const chartRef = useRef(null);
     const [gptResponse, setGptResponse] = useState(null);  // <- Add state to store the gpt_response
     const [analysisType, setAnalysisType] = useState('emotion'); // default to 'emotion'
@@ -44,9 +45,9 @@ const Product = () => {
         .then(data => {
             console.log(data);
             console.log("type of data: ", typeof(data));
-            const parsedData = typeof data.emotions === 'string' ? JSON.parse(data.emotions) : data.emotions;
-            const labels = parsedData.map(item => item.data.emotions.emotion);
-            const values = parsedData.map(item => item.data.emotions.score);
+            const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+            let labels = parsedData.emotions.map(item => item.emotion);
+            let values = parsedData.emotions.map(item => item.score);
             setGraphData({
                 labels: labels,
                 datasets: [{
@@ -54,9 +55,38 @@ const Product = () => {
                     data: values,
                     backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
                                       '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
-                }]
+                }],
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
             });
             setGptResponse(parsedData.gpt_response)
+            if(analysisType==="emotion"){
+                let labels = parsedData.IBM.map(item => item.emotion);
+                let values = parsedData.IBM.map(item => item.score);
+                setGraphData2({
+                    labels: labels,
+                    datasets: [{
+                        label: 'Emotions',
+                        data: values,
+                        backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+                                          '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
+                    }],
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                })
+            }
         })
         .catch(error => {
             console.error("There was an error sending the audio file", error);
@@ -104,6 +134,27 @@ const Product = () => {
                 
                 });
                 setGptResponse(parsedData.gpt_response)
+                if(analysisType==="emotion"){
+                    let labels = parsedData.IBM.map(item => item.emotion);
+                    let values = parsedData.IBM.map(item => item.score);
+                    setGraphData2({
+                        labels: labels,
+                        datasets: [{
+                            label: 'Emotions',
+                            data: values,
+                            backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+                                              '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
+                        }],
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }
+                        }
+                    })
+                }
             })
             .catch(error => {
                 console.error("There was an error sending the audio file", error);
@@ -151,12 +202,19 @@ const Product = () => {
     return (
         <animated.div style={fadeIn} className="product-dashboard">
             <div className="graph-dropdown-container">
-                <div className="graph-container">
-                    {!audioFile && <p>Upload or record an audio file to view the analysis graph.</p>}
-                    {graphData && (analysisType==="parkinsons" ? 
+            <div className="graph-container">
+                {!audioFile && <p>Upload or record an audio file to view the analysis graph.</p>}
+                {graphData && (analysisType === "parkinsons" ? 
                     <Bar data={graphData} options={graphData?.options} /> :
                     <Bar data={graphData} />
-)}                </div>
+                )}
+
+            </div>
+            {analysisType === "emotion" && graphData2 &&
+                <div className="graph-container second-graph">
+                    <Bar data={graphData2} />
+                </div>
+            }
 
                 <div className="analysis-type-dropdown">
                     <label>Select Analysis Type: </label>
