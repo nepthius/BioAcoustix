@@ -1,4 +1,6 @@
 import subprocess
+from server import output_filename
+from scipy.io import wavfile
 
 # Install the Whisper library from GitHub
 subprocess.run(["pip", "install", "git+https://github.com/openai/whisper.git"])
@@ -8,7 +10,7 @@ subprocess.run(["pip", "install", "git+https://github.com/openai/whisper.git"])
 # subprocess.run(["sudo", "apt", "update", "&&", "sudo", "apt", "install", "ffmpeg"])
 
 # Run the Whisper command
-audio_file = "backend/03-01-01-01-01-01-01.wav"
+audio_file = output_filename
 model = "tiny.en"
 
 result = subprocess.run(["whisper", audio_file, "--model", model], capture_output=True, text=True)
