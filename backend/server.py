@@ -1,4 +1,4 @@
-from Demo_emotion import predict_emotion_from_audio
+from huggingface import predict_emotion_from_audio
 from flask import Flask, request, jsonify
 from pydub import AudioSegment
 import datetime
@@ -48,10 +48,11 @@ def upload_file():
             os.remove(temp_filename)
             
             data = predict_emotion_from_audio(output_filename)
-            data = [(key, float(value)) for key, value in data]
+            # No need to swap or convert anything here
 
-            json_data = [{'emotion': key, 'value': value} for key, value in data]
+            json_data = [{'emotion': item['label'], 'score': item['score']} for item in data]
             json_string = json.dumps(json_data, indent=2)
+
 
             return jsonify(json_string), 200
 

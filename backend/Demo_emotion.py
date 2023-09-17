@@ -12,19 +12,23 @@ def predict_emotion_from_audio(audio_path):
     data_x, sampling_rate = librosa.load(audio_path, res_type='kaiser_fast')
     mfccs = np.mean(librosa.feature.mfcc(y=data_x, sr=sampling_rate, n_mfcc=features).T, axis=0)
     val.append(mfccs)
+    
+    # Normalize the data
+    val = np.array(val)
+    mean = np.mean(val, axis=0)
+    std = np.std(val, axis=0)
+
+    # Add a small constant to avoid division by zero
+    epsilon = 1e-10
+    val = (val - mean) / (std + epsilon)
+    
     val = np.expand_dims(val, axis=1)
     val = np.swapaxes(val, 1, 2)
     val = np.resize(val, (1, 58, 1))
     
-    # Normalize the data
-    for i in range(len(val)):
-        val[i] = (val[i] + 4.05214) / 51.821
-    
     # Load the trained model and predict
     model = tf.keras.models.load_model('/Users/anish/BioAcoustix/backend/model.h5')
-    #print(model.summary())
-    classes = ["angry", "calm", "disgust", "fear", "happy","neutral","sad","surprise"]
-    #print(model.predict(val))
+    classes = ["angry", "calm", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
     probabilities = scipy.special.softmax(model.predict(val))[0]
     
     # Create a list of tuples with class and its probability

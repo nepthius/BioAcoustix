@@ -79,7 +79,7 @@ const Product = () => {
                 console.log("type of data: ", typeof(data));
                 const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
                 const labels = parsedData.map(item => item.emotion);
-                const values = parsedData.map(item => item.value);
+                const values = parsedData.map(item => item.score);
                 setGraphData({
                     labels: labels,
                     datasets: [{
