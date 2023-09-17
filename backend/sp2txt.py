@@ -33,13 +33,18 @@ natural_language_understanding.set_service_url('https://api.us-east.natural-lang
 
 #Sentiment Analysis
 transcription = result[0].split(']')[1:]
-# print(resulty)
-# resulty = ''.join(resulty)
-# target_words = resulty.split(' ')
+
 print(transcription)
 
 response = natural_language_understanding.analyze(
     text = transcription,
     features=Features(keywords=KeywordsOptions(sentiment = True, emotion = True, limit=5))).get_result()
 
-print(json.dumps(response, indent=2))
+#sentiment analysis of the sentence
+sentiment_dict = response["keywords"][0]["emotion"]
+#Keys:
+#sadness print(sentiment_dict['sadness'])
+#joy
+#fear
+#disgust
+#anger
