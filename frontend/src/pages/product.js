@@ -40,6 +40,19 @@ const Product = () => {
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            console.log("type of data: ", typeof(data));
+            const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
+            const labels = parsedData.map(item => item.emotion);
+            const values = parsedData.map(item => item.value);
+            setGraphData({
+                labels: labels,
+                datasets: [{
+                    label: 'Emotions',
+                    data: values,
+                    backgroundColor: ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+                                      '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
+                }]
+            });
         })
         .catch(error => {
             console.error("There was an error sending the audio file", error);
