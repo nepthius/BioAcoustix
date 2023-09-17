@@ -36,6 +36,7 @@ def upload_file():
         return jsonify({"error": "Invalid file"}), 400
 
     if file:
+        
         timestamp = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 
         # Create a temporary filename for the uploaded file
@@ -43,12 +44,13 @@ def upload_file():
         file.save(temp_filename)
 
         output_filename = os.path.join(UPLOAD_FOLDER, f"audio_{timestamp}.wav")
-
+        
         try:
             # Determine the audio format from the file extension and then load using pydub
             extension = file.filename.rsplit('.', 1)[1].lower()
             if extension == "ogg":
                 audio = AudioSegment.from_ogg(temp_filename)
+                print("oyeljwlfkjkfLJWLKEJLK")
             elif extension == "mp3":
                 audio = AudioSegment.from_mp3(temp_filename)
             elif extension == "wav":
