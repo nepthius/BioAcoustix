@@ -52,19 +52,19 @@ const Home = () => {
             <div className="homepage-segment" style={scrollEffect(0)} ref={el => segmentRefs.current[0] = el}>
                 <div className="homepage-circle circle-top-left"></div>
                 <h2>About the Product</h2>
-                <p>Our product BioAcoustix revolutionizes telehealth data analysis by collecting and analyzing bioacoustic markers from patient speech data. These recordings can be used to identify diseases early and effectively</p>
+                <p style={{textAlign: "center"}}>Our product BioAcoustix revolutionizes telehealth data analysis by collecting and analyzing bioacoustic markers from patient speech data. These recordings can be used to identify diseases early and effectively</p>
             </div>
             
             <div className="homepage-segment" style={scrollEffect(1)} ref={el => segmentRefs.current[1] = el}>
                 <div className="homepage-circle circle-bottom-right"></div>
                 <h2>Why Telehealth is Important</h2>
-                <p>Telehealth is pivotal in modern healthcare, as it provides convenient and accessible medical consultations. Telehealth has grown rapidly since 2020 and will continue to positively impact millions of lives.</p>
+                <p style={{textAlign: "center"}}>Telehealth is pivotal in modern healthcare, as it provides convenient and accessible medical consultations. Telehealth has grown rapidly since 2020 and will continue to positively impact millions of lives.</p>
             </div>
             
             <div className="homepage-segment" style={scrollEffect(2)} ref={el => segmentRefs.current[2] = el}>
                 <div className="homepage-circle circle-top-left"></div>
                 <h2>How BioAcoustix Enhances Telehealth Platforms</h2>
-                <p>BioAcoustix acts as a remote diagnosis assistant to clinicians and provides them with a constant stream of speech data through our continuously monitoring dashboards. BioAcoustix uses machine learning algorithms as well as generative AI to provide high-quality and accurate data results.</p>
+                <p style={{textAlign: "center"}}>BioAcoustix acts as a remote diagnosis assistant to clinicians and provides them with a constant stream of speech data through our continuously monitoring dashboards. BioAcoustix uses machine learning algorithms as well as generative AI to provide high-quality and accurate data results.</p>
             </div>
 
             <div className="homepage-segment" style={scrollEffect(3)} ref={el => segmentRefs.current[3] = el}>
