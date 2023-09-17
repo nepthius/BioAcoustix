@@ -1,4 +1,6 @@
 import subprocess
+from server import output_filename
+from scipy.io import wavfile
 
 # Install the Whisper library from GitHub
 subprocess.run(["pip", "install", "git+https://github.com/openai/whisper.git"])
@@ -8,7 +10,7 @@ subprocess.run(["pip", "install", "git+https://github.com/openai/whisper.git"])
 # subprocess.run(["sudo", "apt", "update", "&&", "sudo", "apt", "install", "ffmpeg"])
 
 # Run the Whisper command
-audio_file = "./audio/audio_20230917071625.wav"
+audio_file = output_filename
 model = "tiny.en"
 
 result = subprocess.run(["whisper", audio_file, "--model", model], capture_output=True, text=True)
@@ -33,13 +35,18 @@ natural_language_understanding.set_service_url('https://api.us-east.natural-lang
 
 #Sentiment Analysis
 transcription = result[0].split(']')[1:]
-# print(resulty)
-# resulty = ''.join(resulty)
-# target_words = resulty.split(' ')
+
 print(transcription)
 
 response = natural_language_understanding.analyze(
     text = transcription,
     features=Features(keywords=KeywordsOptions(sentiment = True, emotion = True, limit=5))).get_result()
 
-print(json.dumps(response, indent=2))
+#sentiment analysis of the sentence
+sentiment_dict = response["keywords"][0]["emotion"]
+#Keys:
+#sadness print(sentiment_dict['sadness'])
+#joy
+#fear
+#disgust
+#anger
