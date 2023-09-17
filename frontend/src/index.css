@@ -76,10 +76,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    justify-content: flex-start; /* Align the content to the top */
+    min-height: 100vh; /* Minimum height of the viewport */
     background-color: #e9f8f1;
     font-family: 'Arial', sans-serif;
+    padding: 20px 0; /* Optional: to give some padding on the top and bottom */
 }
 
 .graph-container {
@@ -195,4 +196,72 @@
 
 .record-button.stop:hover {
     background-color: #1b5e20;
+}
+
+.gpt-response-notes {
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+    padding: 20px 30px;
+    margin: 20px 0;
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+    font-family: "Courier New", Courier, monospace;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(10px);  /* Initial position for animation */
+    opacity: 0;  /* Initial opacity for animation */
+    animation: slideUp 0.5s 0.5s forwards;  /* Animation Name, Duration, Delay, Play mode */
+}
+
+/* Add a linear gradient background to simulate lines */
+.gpt-response-notes::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 24px, #e0e0e0 25px);
+    z-index: -1;
+}
+
+.gpt-response-notes h3 {
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.gpt-response-notes p {
+    padding: 5px 0;
+    margin-left: 20px;
+    font-size: 1.2em;
+    margin-bottom: 25px;  /* Space between lines */
+}
+
+@keyframes slideUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.note-content {
+    overflow: auto;
+    max-height: 400px; /* or whatever height limit you prefer */
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f7f7f7;
+}
+
+.note-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.note-content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+}
+
+.note-content::-webkit-scrollbar-track {
+    background: #f7f7f7;
 }

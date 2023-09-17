@@ -6,6 +6,25 @@ import os
 import json
 import traceback
 
+import openai
+import json
+from dotenv import load_dotenv
+import os
+openai.api_key = os.getenv('OPENAI_KEY')
+def chatGPT(GPTquery):
+    response = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo",
+        temperature = 1,
+        max_tokens = 2000,
+        messages = [
+            { "role": "user","content": GPTquery}
+        ]
+    )
+    
+    return(response['choices'][0]['message']['content'])
+
+
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = './audio'
@@ -52,9 +71,32 @@ def upload_file():
 
             json_data = [{'emotion': item['label'], 'score': item['score']} for item in data]
             json_string = json.dumps(json_data, indent=2)
+            print("jstring: ", json_string)
+            
+            emotionsDict = json.loads(json_string)
 
+            # Assuming emotionsDict is the name of the list of dictionaries you shared
+            top_two_emotions = emotionsDict[:2]
 
-            return jsonify(json_string), 200
+            # Extract the 'emotion' labels from the top two emotions
+            first_emotion = top_two_emotions[0]['emotion']
+            second_emotion = top_two_emotions[1]['emotion']
+
+            # Construct the prompt string
+            prompt = f"You are a physician that is apart of a tele health platform. In order to diagnose possible illnesses you listen to a patient's voice. The top two emotions that you hear are {first_emotion} and {second_emotion}. Determine any possible diagnosis/correlation to a diagnosis that you can make in order to help the patient. Only return a response/limit your response with only a numbered list of different diagnosis. Also go into 1-2 sentences in depth with each numbered point to justify why the emotions could be symptoms of this illness. You cannot respond with anything other than the numbered list, not even disclaimers or reminders. Please remember this."
+
+            ddata = chatGPT(prompt)
+
+            print("ddata: ", ddata)
+            response_data = {
+                "emotions": json_data,
+                "gpt_response": ddata  # Here, ddata is just a string
+            }
+
+            json_response = json.dumps(response_data, indent=2)
+            print("json_response: ", json_response)
+
+            return jsonify(json_response), 200
 
         except Exception as e:
             app.logger.error(f"Error during conversion: {str(e)}")

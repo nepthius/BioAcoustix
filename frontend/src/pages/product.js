@@ -12,6 +12,7 @@ const Product = () => {
     const mediaRecorderRef=useRef(null)
     const [graphData, setGraphData] = useState(null);
     const chartRef = useRef(null);
+    const [gptResponse, setGptResponse] = useState(null);  // <- Add state to store the gpt_response
 
 
     
@@ -41,9 +42,9 @@ const Product = () => {
         .then(data => {
             console.log(data);
             console.log("type of data: ", typeof(data));
-            const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
-            const labels = parsedData.map(item => item.emotion);
-            const values = parsedData.map(item => item.score);
+            const parsedData = typeof data.emotions === 'string' ? JSON.parse(data.emotions) : data.emotions;
+            const labels = parsedData.map(item => item.data.emotions.emotion);
+            const values = parsedData.map(item => item.data.emotions.score);
             setGraphData({
                 labels: labels,
                 datasets: [{
@@ -53,6 +54,7 @@ const Product = () => {
                                       '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
                 }]
             });
+            setGptResponse(parsedData.gpt_response)
         })
         .catch(error => {
             console.error("There was an error sending the audio file", error);
@@ -76,10 +78,11 @@ const Product = () => {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                console.log("type of data: ", typeof(data));
+                
                 const parsedData = typeof data === 'string' ? JSON.parse(data) : data;
-                const labels = parsedData.map(item => item.emotion);
-                const values = parsedData.map(item => item.score);
+                console.log("type of data: ", typeof(data));
+                const labels = parsedData.emotions.map(item => item.emotion);
+                const values = parsedData.emotions.map(item => item.score);
                 setGraphData({
                     labels: labels,
                     datasets: [{
@@ -89,6 +92,7 @@ const Product = () => {
                                           '#E6B333', '#3366E6', '#999966', '#99E6E6', '#669900'],
                     }]
                 });
+                setGptResponse(parsedData.gpt_response)
             })
             .catch(error => {
                 console.error("There was an error sending the audio file", error);
@@ -157,6 +161,15 @@ const Product = () => {
                     </button>
                 )}
             </div>
+
+            {gptResponse && 
+                    <div className="gpt-response-notes">
+                        <h3>Notes</h3>
+                        <div className="note-content">
+                            {gptResponse.split("\n").map((note, index) => <p key={index}>{note}</p>)}
+                        </div>
+                    </div>
+            }
         </animated.div>
     );
 }
